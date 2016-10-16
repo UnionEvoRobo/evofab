@@ -18,7 +18,7 @@ class AnnRunner(object):
         self.ideal_grid = ideal_grid
         self.gridworld = GridWorld(ideal_grid.width, ideal_grid.height, cell_size)
         self.gridworld.set_ideal_grid(ideal_grid)
-        self.printer = Printer(10, 10, 9, self.gridworld, units_per_cell) #TODO: shouldn't be giving location values here when it's determined somewhere else. that smells a lot
+        self.printer = Printer(10, 10, 1, self.gridworld, units_per_cell) #TODO: shouldn't be giving location values here when it's determined somewhere else. that smells a lot
         self.camera = Camera(self.gridworld.grid, self.printer, self.camera_size)
         self.ideal_camera = Camera(self.gridworld.ideal_grid, self.printer, self.camera_size)
 

@@ -3,18 +3,19 @@ from vector import Vector
 class Printer(object):
     """A simple model of a 2d 3d-printer. Can draw in a GridWorld"""
 
-    def __init__ (self, x, y, r, grid, sub_cell_resolution):
+    def __init__ (self, x, y, pen_size, grid, sub_cell_resolution):
         """Constructs a printer which draws in a GridWorld and moves in increments of fractions of cell widths
 
         x: the x coordinate for the printer start position
         y: the y coordinate for the printer start position
-        r: the radius of the printer (does not influence how the printer prints, only the way it is represented if drawn visually)
+        pen_size: the size of the pen that the printer draws with (in gridcell units). If >1 then the printer will draw in multiple grid cells at a time. Note, the pen effectively has a hitbox of this width
         grid: the gridworld that the printer can act upon
         sub_cell_resolution: the factor by which cell width is divided by to determine the distance moved by the printer in a single time unit
         """
 
         self.position = Vector(float(x), float(y))
-        self.r = r
+        self.pen_size = pen_size
+        self.r = (grid.gridsize() * pen_size) / 2
         move_unit_pixels = grid.gridsize() / sub_cell_resolution
         self.v = Vector(move_unit_pixels, move_unit_pixels)
         self.grid = grid
@@ -43,7 +44,7 @@ class Printer(object):
             self.position = self.position.plus(self.v)
             if self.penDown:
                 position = (self.position.x, self.position.y)
-                self.grid.PenDraw(position)
+                self.grid.PenDraw(position, self.pen_size)
 
     def move_is_valid(self):
         """ Checks if moving with the given dt will cause collision with the boundaries of the grid """

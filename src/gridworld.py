@@ -1,4 +1,5 @@
 import math
+import numpy as n
 
 from vector import Vector
 from grid import Grid
@@ -36,10 +37,23 @@ class GridWorld(object):
         """Returns the cell scale for the GridWorld (the number of pixels making up each cell)"""
         return self.grid.gridsize
 
-    def PenDraw(self,p):
-        """Draw with the pen in the closest grid location to the pixel location (a tuple)"""
-        myx,myy = self.grid.find_closest_gridloc(p)
-        self.grid.set_loc_val(myx, myy, 1)
+    def PenDraw(self,p,pen_size=1):
+        """Draw with the pen in the closest grid location to the pixel location (a tuple)
+        
+        pen_size: the width of the pen (in gridcells)"""
+        if pen_size != 1:
+            pixel_dimension = pen_size/2 * self.gridsize()
+            topleft_corner = n.subtract(p, (pixel_dimension/2, pixel_dimension/2))
+            bottomright_corner = n.add(p, (pixel_dimension/2, pixel_dimension/2))
+            topleft_cell = self.grid.find_closest_gridloc(topleft_corner)
+            bottomright_cell = self.grid.find_closest_gridloc(bottomright_corner)
+            #fill all of the cells that fall in the range between topleft -- bottomright
+            for i in range(topleft_cell[0], bottomright_cell[0] + 1):
+                for j in range(topleft_cell[1], bottomright_cell[1] + 1):
+                    self.grid.set_loc_val(i, j, 1)
+        else:
+            myx,myy = self.grid.find_closest_gridloc(p)
+            self.grid.set_loc_val(myx, myy, 1)
 
     #shouldn't need these for now -- might be useful later?
     def distance(self,startp,endp):
