@@ -8,19 +8,23 @@ from ann import Network
 class AnnRunner(object):
     """Wraps up the gross reality of running a ``print'' using the printer simulation (controlled by a neural network)"""
 
-    camera_size = 3
 
-    def __init__(self, ideal_grid_path, cell_size, units_per_cell=10):
+    def __init__(self, ideal_grid_path, cell_size, pen_size, camera_cell_size, camera_grid_dimension):
         """Sets up all the pieces needed to perform a print with the simulated 3d printer (controlled by the neural network). Takes in a path to an a ``goal'' or ``ideal'' grid, and constructs the GridWorld based on the dimensions of that goal grid. Understands both a ``camera'', which observes the actual world (around the print head) and an ``ideal camera'' which observes the same location but based on the ``goal grid''
+
+        pen_size: the size of the printer's pen (in cell units)
+        camera_cell_size: the factor by which a camera cell is larger than a grid cell.
+        camera_grid_dimension: n, where the camera is an nxn grid.  must be odd so that the camera aligns with the grid cells
         """
 
+        assert(camera_grid_dimension %2 != 0) #must have odd camera dimensions so that the camera aligns with the grid cells
         ideal_grid = Grid(path=ideal_grid_path, scale=cell_size)
         self.ideal_grid = ideal_grid
         self.gridworld = GridWorld(ideal_grid.width, ideal_grid.height, cell_size)
         self.gridworld.set_ideal_grid(ideal_grid)
-        self.printer = Printer(10, 10, 1, self.gridworld, units_per_cell) #TODO: shouldn't be giving location values here when it's determined somewhere else. that smells a lot
-        self.camera = Camera(self.gridworld.grid, self.printer, self.camera_size)
-        self.ideal_camera = Camera(self.gridworld.ideal_grid, self.printer, self.camera_size)
+        self.printer = Printer(10, 10, pen_size, self.gridworld) #TODO: shouldn't be giving location values here when it's determined somewhere else. that smells a lot
+        self.camera = Camera(self.gridworld.grid, self.printer, camera_grid_dimension, camera_cell_size * cell_size)
+        self.ideal_camera = Camera(self.gridworld.ideal_grid, self.printer, camera_grid_dimension, camera_cell_size * cell_size)
 
     def run(self, n, iterations=10000):
         """Runs a simulated print run with the printer simulation (controlled by an ANN. Starts the printer in the location provided by the ideal grid spec
@@ -37,7 +41,7 @@ class AnnRunner(object):
             result = [int(round(x)) for x in result]
             result = ''.join(map(str, result))
             self.printer.set_printer_direction(self.get_velocity(result[:2]), self.get_velocity(result[2:]))
-            self.printer.simulate()
+            self.printer.simulate(self.camera, self.gridworld)
             self.update()
         return (self.ideal_grid, self.gridworld.grid)
 

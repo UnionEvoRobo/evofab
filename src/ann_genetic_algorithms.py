@@ -13,7 +13,7 @@ statsfile_filename = 'stats.csv'
 class AnnPopulation(Population):
     """A population of relatively simple neural networks. Currently impelmented to be semi-specific to the task of optimimizing neural netowrks to control a 3d-printer to draw particular (specified) shapes"""
 
-    def __init__(self, random_seed, printer_runtime, size, mutation_rate, mutation_range, crossover_rate, replacement_number, num_input, num_hidden, num_output, outputfolder, reward_for_correct=None, punishment_for_incorrect=None, goal=None, is_visual=True, dump_to_files=False, cell_size=0, units_per_cell=0, recur = 0, time = 1):
+    def __init__(self, random_seed, printer_runtime, size, mutation_rate, mutation_range, crossover_rate, replacement_number, num_input, num_hidden, num_output, outputfolder, reward_for_correct=None, punishment_for_incorrect=None, goal=None, is_visual=True, dump_to_files=False, cell_size=0, camera_grid_dimension=3, camera_cell_size = 1, printer_pen_size=1, recur = 0, time = 1):
         """Constructs a population on which to perform evolution to optimize to the defined fitness function
 
         random_seed: the random seed for the stochastic components of the system. Needs to be specified so that we have repeatable experiments
@@ -33,7 +33,9 @@ class AnnPopulation(Population):
         is_visual: False if there should be GUI (pygame) output during evaluation, and False otherwise
         dump_to_files: Whether or not to dump statistics about fitness over time and a Pickled version of the highest-fitness individual so far to the appropriate directory
         cell_size: the number of pixels in a single grid cell
-        units_per_cell: the factor by which cell width is divided by to determine the distance moved by the printer in a single time unit
+        camera_grid_dimension: n, the number of cells in one dimension of the nxn camera grid.  must be odd so that the camera aligns with the grid cells
+        camera_cell_size: the factor by which a camera cell is larger than a world cell. if none is provided, will default to 1.
+        printer_pen_size: the factor by which cell width is divided by to determine the distance moved by the printer in a single time unit
         recur: 0 if there should be no recurrance in the neural network
                1 for recurance from outputs to inputs
                2 for recurance from inputs to inputs
@@ -42,10 +44,12 @@ class AnnPopulation(Population):
         """
 
         super(AnnPopulation, self).__init__(random_seed, size, mutation_rate, mutation_range, crossover_rate, replacement_number, outputfolder)
+        self.camera_grid_dimension = camera_grid_dimension
         self.goal = goal
         self.printer_runtime = printer_runtime
-        self.units_per_cell = units_per_cell
+        self.printer_pen_size = printer_pen_size
         self.cell_size = cell_size
+        self.camera_cell_size = camera_cell_size
         self.reward_for_correct = reward_for_correct
         self.punishment_for_incorrect = punishment_for_incorrect
         self.is_visual = is_visual
@@ -151,9 +155,9 @@ class AnnGenotype(Genotype):
         for world in self.population.goal:
             if self.population.is_visual:
                 from gui_ann_runner import GuiAnnRunner
-                runner = GuiAnnRunner(world, self.population.cell_size, self.population.units_per_cell)
+                runner = GuiAnnRunner(world, self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension)
             else:
-                runner = AnnRunner(world, self.population.cell_size, self.population.units_per_cell)
+                runner = AnnRunner(world, self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension)
             ideal_grid, actual_grid = runner.run(self.ann, iterations=self.population.printer_runtime)
             result.append((ideal_grid.grid, actual_grid.grid))
         return result

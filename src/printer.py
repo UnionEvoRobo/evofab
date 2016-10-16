@@ -3,20 +3,19 @@ from vector import Vector
 class Printer(object):
     """A simple model of a 2d 3d-printer. Can draw in a GridWorld"""
 
-    def __init__ (self, x, y, pen_size, grid, sub_cell_resolution):
+    def __init__ (self, x, y, pen_size, grid):
         """Constructs a printer which draws in a GridWorld and moves in increments of fractions of cell widths
 
         x: the x coordinate for the printer start position
         y: the y coordinate for the printer start position
         pen_size: the size of the pen that the printer draws with (in gridcell units). If >1 then the printer will draw in multiple grid cells at a time. Note, the pen effectively has a hitbox of this width
         grid: the gridworld that the printer can act upon
-        sub_cell_resolution: the factor by which cell width is divided by to determine the distance moved by the printer in a single time unit
         """
 
         self.position = Vector(float(x), float(y))
         self.pen_size = pen_size
         self.r = (grid.gridsize() * pen_size) / 2
-        move_unit_pixels = grid.gridsize() / sub_cell_resolution
+        move_unit_pixels = grid.gridsize()
         self.v = Vector(move_unit_pixels, move_unit_pixels)
         self.grid = grid
         self.penDown = False
@@ -26,7 +25,7 @@ class Printer(object):
 
         leftright: -1 = left motion, 0 = no leftright motion, 1 = right motion
         updown: -1 = down motion, 0 = no updown motion, 1 = up motion"""
-        self.v = Vector(leftright, updown)
+        self.v = Vector(leftright*self.grid.gridsize(), updown*self.grid.gridsize())
 
     def set_position_on_grid(self, xcell, ycell):
         """ Move the printer to the specified cell position on the grid"""
