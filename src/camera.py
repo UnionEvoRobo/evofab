@@ -25,7 +25,6 @@ class Camera(object):
 
     def all_cell_values(self):
         output = [self.percent_in_view((x, y)) for x in range(self.n) for y in range(self.n)]
-        print output
         return output
 
     def get_top_left_camera_coords(self):
@@ -34,6 +33,10 @@ class Camera(object):
         x = printer_loc[0] - int(self.cell_size*(self.n/2.0))
         y = printer_loc[1] - int(self.cell_size*(self.n/2.0))
         return (x,y)
+
+    def get_bottom_right_camera_coords(self):
+        topleft = self.get_top_left_camera_coords()
+        return (topleft[0] + self.cell_size*(self.n), topleft[1] + self.cell_size*(self.n))
 
     def percent_in_view(self, camera_cell):
         printer_loc = (self.printer.position.x, self.printer.position.y)
