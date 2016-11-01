@@ -1,4 +1,6 @@
 from morphological_complexity import evaluate
+import perimeter_to_area
+import perimeter_to_rectangular_bound
 from grid import Grid
 
 def compute_ordering(eval_function):
@@ -13,4 +15,4 @@ def compute_ordering(eval_function):
         print result
 
 if __name__ == "__main__":
-    compute_ordering(evaluate)
+    compute_ordering(perimeter_to_area.evaluate)
