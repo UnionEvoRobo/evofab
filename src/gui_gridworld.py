@@ -13,15 +13,21 @@ class GuiGridWorld(GridWorld):
                 xcoord = col * self.gridsize()
                 ycoord = row * self.gridsize()
                 val_at_loc = self.grid.val_at(col, row)
-                val_at_ideal = self.ideal_grid.val_at(col, row)
-                if val_at_loc == 0 and val_at_ideal == 0:
-                    color = pygame.color.Color("white")
-                elif val_at_loc == 0 and val_at_ideal == 1:
-                    color = pygame.color.Color("yellow")
-                elif val_at_loc == 1 and val_at_ideal == 1:
-                    color = pygame.color.Color("blue")
+                if self.ideal_grid != None:
+                    val_at_ideal = self.ideal_grid.val_at(col, row)
+                    if val_at_loc == 0 and val_at_ideal == 0:
+                        color = pygame.color.Color("white")
+                    elif val_at_loc == 0 and val_at_ideal == 1:
+                        color = pygame.color.Color("yellow")
+                    elif val_at_loc == 1 and val_at_ideal == 1:
+                        color = pygame.color.Color("blue")
+                    else:
+                        color = pygame.color.Color("red")
                 else:
-                    color = pygame.color.Color("red")
+                    if val_at_loc == 0:
+                        color = pygame.color.Color("white")
+                    else:
+                        color = pygame.color.Color("blue")
 
                 #actually draw the rectangle
                 dimen_of_rect = self.gridsize()

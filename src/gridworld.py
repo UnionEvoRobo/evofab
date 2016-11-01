@@ -12,6 +12,7 @@ class GridWorld(object):
     def __init__(self,wid,hi,scale):
         """Construct a blank GridWorld with the given dimensions and the given pixel scale for the cells"""
         self.grid = Grid(wid, hi,scale)
+        self.ideal_grid = None
 
     def set_ideal_grid(self, grid):
         """Set the ideal grid for the GridWorld. Allows a user to keep track of the ideal and actual gridworld and query for the difference between them"""
@@ -29,6 +30,10 @@ class GridWorld(object):
 
     def width(self):
         return self.grid.width
+
+    def val_at(self, x, y):
+        """returns the value at the given grid location"""
+        return self.grid.val_at(x,y)
 
     def height(self):
         return self.grid.height

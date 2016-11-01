@@ -1,11 +1,70 @@
 from grid import Grid
+from gui_gridworld import GuiGridWorld
+import pygame
+import time
+from math import *
 
 def evaluate(grid):
     boundaries = identify_boundary_lines(grid)
-    print "the number of boundary cells is: ", len(boundaries)
     path = compute_boundary_path(boundaries)
-    for x in path:
-        print x
+    complexity = calculate_complexity(path)
+
+    return complexity
+
+    #gridworld = GuiGridWorld(grid.width, grid.height, grid.gridsize)
+    #gridworld.grid = grid
+
+    ##some pygame trash to get an image of the input grid
+    #width = gridworld.width() * gridworld.gridsize()
+    #height = gridworld.height() * gridworld.gridsize()
+    #window = pygame.display.set_mode((width, height))
+    #pygame.init()
+
+    #gridworld.draw(window)
+    #pygame.display.update()
+    #time.sleep(1000)
+
+def calculate_complexity(path):
+    path_of_filled_cells = [x[0] for x in path]
+    n = len(path_of_filled_cells)
+    
+    angles = []
+    for i,j in zip(xrange(0,n,2), xrange(2, n, 2)):
+        a1, b1 = path_of_filled_cells[i]
+        a2, b2 = path_of_filled_cells[j]
+
+        dot = a1 * b1 + a2 * b2
+        angle = acos(round(dot/(sqrt(a1*a1 + a2*a2) * sqrt(b1*b1 + b2*b2)), 10))
+        angle = angle * 180/pi
+        angles.append(angle)
+
+    bin_width = 7
+    num_bins = int(floor((max(angles) - min(angles))/bin_width))
+
+    PDF = []
+    for x in range(num_bins + 1):
+        l = min(angles) + (x * bin_width)
+        r = min(angles) + ((x+1) * bin_width)
+        num_in_range = 0
+        for angle in angles:
+            if angle > l and angle < r :
+                num_in_range += 1
+        PDF.append(num_in_range/float(len(angles)))
+    
+    #for n,p in enumerate(PDF):
+    #    print (min(angles) + (n * bin_width)), "&", (min(angles) + ((n+1)*bin_width)), "&", p
+        
+    e = 0
+    for p in PDF:
+        if p > 0:
+            e += p * log(p, 10)
+    e = -e
+    #print
+    #print
+    #print "entropy", e
+    return e
+    #end
+
 
 def compute_boundary_path(boundaries):
     cur = boundaries[0]
@@ -69,7 +128,7 @@ def identify_boundary_lines(grid):
 
     returns a list of cell boundaries containing the subset of all boundaries where one cell is filled and the other is not"""
 
-    print "computing..."
+    #print "computing..."
 
     boundary_cells = []
 
@@ -118,5 +177,5 @@ def identify_boundary_lines(grid):
     return no_duplicates
 
 if __name__ == "__main__":
-    grid = Grid(scale = 4, path = 'worlds/test.test')
+    grid = Grid(scale = 15, path = 'worlds/canonical_inputs/test.test')
     evaluate(grid)
