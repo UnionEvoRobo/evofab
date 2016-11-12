@@ -7,4 +7,4 @@ def evaluate(grid):
         for y in range(grid.height):
             if grid.val_at(x,y):
                 filled += 1
-    return len(boundaries) / float(filled)
+    return (len(boundaries)*len(boundaries)) / float(filled)

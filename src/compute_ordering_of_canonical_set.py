@@ -17,4 +17,4 @@ def compute_ordering(eval_function):
         print result
 
 if __name__ == "__main__":
-    compute_ordering(perimeter_to_rectangular_bound.evaluate)
+    compute_ordering(perimeter_to_area.evaluate)
