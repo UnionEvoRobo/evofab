@@ -73,17 +73,21 @@ class Population(object):
 
         self.create_initial_population()
         print "evaluating initial population"
-        self.eval_fitness(self.members, threadnum)
+        self.eval_fitness(self.members)
         self.print_fitnesses()
         self.output(0)
         for i in xrange(num_iterations):
+            self.iternum = i
             print "evaluating generation %d" % (i + 1)
-            self.cull()
-            children = self.breed()
-            self.eval_fitness(children, threadnum)
-            self.print_fitnesses()
-            self.output(i)
-            self.write_stats(i)
+            self.iteration()
+
+    def iteration(self):
+        self.cull()
+        children = self.breed()
+        self.eval_fitness(children)
+        self.print_fitnesses()
+        self.output(self.iternum)
+        self.write_stats(self.iternum)
 
     def print_fitnesses(self):
         fitnesses = [member.fitness for member in self.members]
@@ -93,7 +97,7 @@ class Population(object):
     def output(self, gen):
         return
 
-    def eval_fitness(self, members, threadnum):
+    def eval_fitness(self, members):
         """Evaluate the fitness of all of the members of the population"""
         q = Queue()
         counter = 0

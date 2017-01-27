@@ -48,10 +48,10 @@ for opt, arg in opts:
 current_time = datetime.datetime.now()
 
 param = {
-        'pop_size' : 35,
+        'pop_size' : 60,
         'mutation_rate' : 0.15,
         'mutation_range' : (-30, 30),
-        'cull_num' : 10,
+        'cull_num' : 40,
         'ann_input' : 9,
         'ann_hidden' : 26,
         'ann_output' : 4,

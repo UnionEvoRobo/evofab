@@ -1,5 +1,13 @@
 import perimeter_to_area
+import thread
 from ann_genetic_algorithms import *
+from comp_gui_ann_runner import CompGuiAnnRunner 
+
+def run_from_file(cell_size, printer_pen_size, camera_cell_size, camera_grid_dimension, outputfolder, printer_runtime):
+    print "got here"
+    n = ann_io.load(outputfolder + '/curbest.ann')
+    runner = CompGuiAnnRunner(cell_size, printer_pen_size, camera_cell_size, camera_grid_dimension, draw_each=True, draw_full=False)
+    runner.run(n, iterations=printer_runtime)
 
 class CompPopulation(AnnPopulation):
     """A population of relatively simple neural networks. Currently impelmented to be semi-specific to the task of optimimizing neural netowrks to control a 3d-printer to draw particular (specified) shapes"""
@@ -35,6 +43,11 @@ class CompPopulation(AnnPopulation):
         super(CompPopulation, self).__init__(random_seed, printer_runtime, size, mutation_rate, mutation_range, crossover_rate, replacement_number, num_input, num_hidden, num_output, outputfolder, reward_for_correct, punishment_for_incorrect, goal, is_visual, dump_to_files, cell_size, camera_grid_dimension, camera_cell_size, printer_pen_size, recur, time)
         self.genotype_factory = CompGenotypeFactory(self, recur, time)
 
+    def iteration(self):
+        super(CompPopulation, self).iteration()
+        print "got here"
+        thread.start_new_thread(run_from_file, (self.cell_size, self.printer_pen_size, self.camera_cell_size, self.camera_grid_dimension, self.outputfolder, self.printer_runtime))
+
 class CompGenotypeFactory(object):
     def __init__(self, population, recur, time):
         """An GenotypeFactory for ANNs"""
@@ -68,9 +81,8 @@ class CompGenotype(AnnGenotype):
 
         self.ann.allConnections = self.values
         if self.population.is_visual:
-            from comp_gui_ann_runner import CompGuiAnnRunner 
-            runner = CompGuiAnnRunner(self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension)
+            runner = CompGuiAnnRunner(self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension, draw_each=True)
         else:
-            runner = AnnRunner(world, self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension)
+            runner = CompGuiAnnRunner(self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension, draw_each=False)
         actual_grid = runner.run(self.ann, iterations=self.population.printer_runtime)
         return actual_grid.grid
