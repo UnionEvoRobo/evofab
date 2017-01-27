@@ -1,4 +1,4 @@
-from ann_genetic_algorithms import AnnPopulation
+from complexity_ann_ga import CompPopulation 
 from phys_printer_genetic_algorithms import PhysPopulation
 from grid import Grid
 import datetime
@@ -48,27 +48,27 @@ for opt, arg in opts:
 current_time = datetime.datetime.now()
 
 param = {
-        'pop_size' : 80,
+        'pop_size' : 35,
         'mutation_rate' : 0.15,
         'mutation_range' : (-30, 30),
-        'cull_num' : 56,
+        'cull_num' : 10,
         'ann_input' : 9,
         'ann_hidden' : 26,
         'ann_output' : 4,
-        'cell_scale' : 9,
+        'cell_scale' : 4,
         'camera_grid_dimension': 3, #factor by which camera cells are bigger than grid cells. must be odd so that the camera aligns to the grid cells
         'camera_cell_scale': 13,
         'inputs' : ['worlds/v_big_BIG.test'],
         'random_seed' : int(current_time.strftime('%s')),
         'time' : current_time,
         'num_gens' : 8000,
-        'printer_runtime' : 100,
+        'printer_runtime' : 90,
         'printer_pen_size' : 4,
         'reward_for_correct' : 100,
         'punishment_for_incorrect': 30,
         'crossover_rate': .5,
         'recur_mode': 3,
-        'time_to_recur': 2
+        'time_to_recur': 3
         }
 
 if is_dumping:
@@ -114,7 +114,7 @@ if port:
             dump_to_files=is_dumping,
             )
 else:
-    population = AnnPopulation(
+    population = CompPopulation(
             param['random_seed'],
             param['printer_runtime'],
             param['pop_size'],

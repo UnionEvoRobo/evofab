@@ -150,6 +150,7 @@ class AnnGenotype(Genotype):
 
     def express(self):
         """Control the simulated 2d 3d-printer with this member of the population and evaluate the fitness of the output"""
+        print "no but here tho"
         result = []
         self.ann.allConnections = self.values
         for world in self.population.goal:

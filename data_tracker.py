@@ -16,8 +16,8 @@ except getopt.GetoptError:
 tmpdir_name = 'tracker_tmp/'
 datadir = 'data/'
 remote = False
-user = 'petersoj'
-host = 'jupiter'
+#user = 'petersoj'
+#host = 'jupiter'
 refresh_time = 5
 
 for opt, arg in opts:
@@ -42,12 +42,12 @@ fig.canvas.set_window_title('(FGP) Remote Monitor')
 textobject = plt.text(10, 100, 'improving?', bbox=dict(facecolor='white', alpha=0.5))
 
 def get_file():
-    if remote:
-        assert datadir != 'data/'
-        os.system('rsync -avzhe ssh ' + user + '@' + host + ':' + datadir + '/data/' + ' ' + tmpdir_name)
-        return tmpdir_name + 'stats.csv'
-    else:
-        return 'data/stats.csv'
+#    if remote:
+#        assert datadir != 'data/'
+#        os.system('rsync -avzhe ssh ' + user + '@' + host + ':' + datadir + '/data/' + ' ' + tmpdir_name)
+#        return tmpdir_name + 'stats.csv'
+#    else:
+    return 'data/stats.csv'
 
 def clean():
     if remote:
@@ -65,12 +65,13 @@ while len(gen_vals) < 1:
     with open(get_file(), 'r') as inputfile:
         reader = csv.reader(inputfile)
         reader1 = [x for x in reader][1:]
-        gen_vals = [map(int, row) for row in reader1]
+        gen_vals = [map(float, row) for row in reader1]
     clean()
 maxs = [row[2] for row in gen_vals]
 mins = [row[1] for row in gen_vals]
 medians = [row[3] for row in gen_vals]
 last_gen_num = gen_vals[-1][0]
+last_gen_num = int(last_gen_num)
 xax = range(last_gen_num + 1)
 pmax = plt.plot(xax, maxs, 'g-', label='max')
 pmin = plt.plot(xax, mins, 'r-', label='min')
@@ -84,10 +85,11 @@ while True:
     with open(get_file(), 'r') as inputfile:
         reader = csv.reader(inputfile)
         reader.next()
-        gen_vals = [map(int, row) for row in reader]
+        gen_vals = [map(float, row) for row in reader]
         if gen_vals[-1][0] > last_gen_num:
             improved_last_check = False
             last_gen_num = gen_vals[-1][0]
+            last_gen_num = int(last_gen_num)
             maxs.append(gen_vals[-1][2])
             mins.append(gen_vals[-1][1])
             medians.append(gen_vals[-1][3])

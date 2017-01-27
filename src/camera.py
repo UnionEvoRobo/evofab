@@ -52,7 +52,7 @@ class Camera(object):
         for i in range(topleft_gridloc[0], bottomright_gridloc[0]):
             for j in range(topleft_gridloc[1], bottomright_gridloc[1]):
                 if not (self.grid.width - 1 < i or i < 0 or self.grid.height -1 < j or j < 0):
-                    if self.grid.val_at(i,j) == 1:
+                    if self.grid.val_at(i,j):
                         count += 1
         num_cells = (bottomright_gridloc[0] - topleft_gridloc[0]) * (bottomright_gridloc[1] - topleft_gridloc[1])
         return count/float(num_cells)
