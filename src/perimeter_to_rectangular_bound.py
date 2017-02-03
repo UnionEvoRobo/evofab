@@ -13,5 +13,6 @@ def evaluate(grid):
     max_y = max([y for x,y in filled])
     dx = max_x - min_x
     dy = max_y - min_y
-    rect_hull = 2*dx + 2*dy
+    #rect_hull = (2*dx + 2*dy)/float((dx*dy))
+    rect_hull = (2*dx + 2*dy)
     return len(boundaries) / float(rect_hull)

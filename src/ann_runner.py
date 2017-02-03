@@ -32,8 +32,8 @@ class AnnRunner(object):
 
         #set the printer location to the starting postition as defined by the ideal_grid spec
         self.printer.set_position_on_grid(*self.gridworld.get_starting_position())
+        self.printer.setPenDown()
         for i in xrange(iterations):
-            self.printer.setPenDown()
             actual = self.camera.all_cell_values()
             ideal = self.ideal_camera.all_cell_values()
             pattern = [i - a for i,a in zip(actual, ideal)]
