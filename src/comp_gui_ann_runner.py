@@ -6,7 +6,7 @@ class CompGuiAnnRunner(GuiAnnRunner):
         assert(camera_grid_dimension %2 != 0) #must have odd camera dimensions so that the camera aligns with the grid cells
         self.draw_each = draw_each
         self.draw_full = draw_full
-        self.gridworld = GuiGridWorld(200, 200, cell_size)
+        self.gridworld = GuiGridWorld(100, 100, cell_size)
         self.printer = GuiPrinter(10, 10, pen_size, self.gridworld)
         self.camera = GuiCamera(self.gridworld.grid, self.printer, camera_grid_dimension, camera_cell_size * cell_size)
 
@@ -19,7 +19,7 @@ class CompGuiAnnRunner(GuiAnnRunner):
             pygame.init()
 
     def run(self, n, iterations=10000):
-        self.printer.set_position_on_grid(100, 100)
+        self.printer.set_position_on_grid(50, 50)
         self.printer.setPenDown()
         for i in xrange(iterations):
             sensor_vals = self.camera.all_cell_values() + [self.printer.position.x, self.printer.position.y]
