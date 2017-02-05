@@ -75,6 +75,7 @@ class CompGenotype(AnnGenotype):
     def calculate_fitness(self, q=None):
        phenotype = self.express() 
        self.fitness = perimeter_to_area.evaluate(phenotype)
+       print self.fitness
 
     def express(self):
         """Control the simulated 2d 3d-printer with this member of the population and evaluate the fitness of the output"""
