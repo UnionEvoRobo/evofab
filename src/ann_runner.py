@@ -40,7 +40,7 @@ class AnnRunner(object):
             result = n.propagate(pattern)
             result = [int(round(x)) for x in result]
             result = ''.join(map(str, result))
-            self.printer.set_printer_direction(self.get_velocity(result[:2]), self.get_velocity(result[2:]))
+            self.printer.set_printer_direction(*self.get_velocity(result))
             self.printer.simulate(self.camera, self.gridworld)
             self.update()
         return (self.ideal_grid, self.gridworld.grid)
@@ -50,9 +50,16 @@ class AnnRunner(object):
 
     def get_velocity(self, instruction):
         """Translates between the output of the neural network and direction instructions for the printer. leftright and updown are translated separately"""
-        if instruction == "10":
-            return -1
-        elif instruction == "01":
-            return 1
+        if instruction == "110":
+            return (0, 1) #north
+        elif instruction == "111":
+            return (0, -1) #south
+        elif instruction == "101":
+            return (-1, 0) #east
+        elif instruction == "100":
+            return (1, 0) #west
+        elif instruction in ["000", "001", "011", "010"]:
+            return (0, 0) #none
         else:
-            return 0
+            print "incorrect instruction output from ann"
+            assert(False)

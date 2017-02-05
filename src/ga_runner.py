@@ -48,13 +48,13 @@ for opt, arg in opts:
 current_time = datetime.datetime.now()
 
 param = {
-        'pop_size' : 60,
+        'pop_size' : 120,
         'mutation_rate' : 0.15,
         'mutation_range' : (-30, 30),
-        'cull_num' : 40,
+        'cull_num' : 90,
         'ann_input' : 11,
         'ann_hidden' : 26,
-        'ann_output' : 4,
+        'ann_output' : 3,
         'cell_scale' : 5,
         'camera_grid_dimension': 3, #factor by which camera cells are bigger than grid cells. must be odd so that the camera aligns to the grid cells
         'camera_cell_scale': 13,
@@ -67,8 +67,8 @@ param = {
         'reward_for_correct' : 100,
         'punishment_for_incorrect': 30,
         'crossover_rate': .5,
-        'recur_mode': 3,
-        'time_to_recur': 3
+        'recur_mode': 1,
+        'time_to_recur': 2
         }
 
 if is_dumping:

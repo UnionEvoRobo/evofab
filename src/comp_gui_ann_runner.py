@@ -26,7 +26,7 @@ class CompGuiAnnRunner(GuiAnnRunner):
             result = n.propagate(sensor_vals)
             result = [int(round(x)) for x in result]
             result = ''.join(map(str, result))
-            self.printer.set_printer_direction(self.get_velocity(result[:2]), self.get_velocity(result[2:]))
+            self.printer.set_printer_direction(*self.get_velocity(result))
             self.printer.simulate(self.camera, self.gridworld)
             if self.draw_full:
                 self.update()
