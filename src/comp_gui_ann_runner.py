@@ -22,10 +22,9 @@ class CompGuiAnnRunner(GuiAnnRunner):
         self.printer.set_position_on_grid(50, 50)
         self.printer.setPenDown()
         for i in xrange(iterations):
-            sensor_vals = self.camera.all_cell_values() + [self.printer.position.x, self.printer.position.y]
+            sensor_vals = self.camera.all_cell_values()
             result = n.propagate(sensor_vals)
             result = [int(round(x)) for x in result]
-            result = ''.join(map(str, result))
             self.printer.set_printer_direction(*self.get_velocity(result))
             self.printer.simulate(self.camera, self.gridworld)
             if self.draw_full:

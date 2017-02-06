@@ -26,8 +26,10 @@ class GuiGridWorld(GridWorld):
                 else:
                     if val_at_loc == 0:
                         color = pygame.color.Color("white")
-                    else:
+                    elif val_at_loc == 1:
                         color = pygame.color.Color("blue")
+                    else:
+                        color = pygame.color.Color("red")
 
                 #actually draw the rectangle
                 dimen_of_rect = self.gridsize()

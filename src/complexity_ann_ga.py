@@ -88,3 +88,8 @@ class CompGenotype(AnnGenotype):
             runner = CompGuiAnnRunner(self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension, draw_each=False)
         actual_grid = runner.run(self.ann, iterations=self.population.printer_runtime)
         return actual_grid.grid
+
+    def randomize(self):
+        """Randomize this member of the population"""
+        lower, upper = self.population.mutation_range
+        self.values = [ random.randrange(lower, upper) for x in self.values]

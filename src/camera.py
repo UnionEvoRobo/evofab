@@ -40,6 +40,7 @@ class Camera(object):
 
     def percent_in_view(self, camera_cell):
         printer_loc = (self.printer.position.x, self.printer.position.y)
+
         #calculate the location of the top left camera cell
         x = printer_loc[0] - int(self.cell_size*(self.n/2.0))
         y = printer_loc[1] - int(self.cell_size*(self.n/2.0))
@@ -48,11 +49,15 @@ class Camera(object):
         bottomright_corner_of_cell = (topleft_corner_of_cell[0] + self.cell_size, topleft_corner_of_cell[1] + self.cell_size)
         topleft_gridloc = self.grid.find_closest_gridloc(topleft_corner_of_cell)
         bottomright_gridloc = self.grid.find_closest_gridloc(bottomright_corner_of_cell)
-        count = 0
-        for i in range(topleft_gridloc[0], bottomright_gridloc[0]):
-            for j in range(topleft_gridloc[1], bottomright_gridloc[1]):
-                if not (self.grid.width - 1 < i or i < 0 or self.grid.height -1 < j or j < 0):
-                    if self.grid.val_at(i,j):
-                        count += 1
-        num_cells = (bottomright_gridloc[0] - topleft_gridloc[0]) * (bottomright_gridloc[1] - topleft_gridloc[1])
-        return count/float(num_cells)
+        if self.grid.inbounds(topleft_corner_of_cell) and self.grid.inbounds(bottomright_corner_of_cell):
+
+            count = 0
+            for i in range(topleft_gridloc[0], bottomright_gridloc[0]):
+                for j in range(topleft_gridloc[1], bottomright_gridloc[1]):
+                    if not (self.grid.width - 1 < i or i < 0 or self.grid.height -1 < j or j < 0):
+                        if self.grid.val_at(i,j):
+                            count += 1
+            num_cells = (bottomright_gridloc[0] - topleft_gridloc[0]) * (bottomright_gridloc[1] - topleft_gridloc[1])
+            return count/float(num_cells)
+        else:
+            return 1

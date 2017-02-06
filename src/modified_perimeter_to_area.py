@@ -9,22 +9,25 @@ def evaluate(grid):
     perim = 0
     skip = False
     for a,b in zip(path[:-2], path[1:]):
-        a_1, a_2 = a
-        b_1, b_2 = b
-        if (a_1 == b_1 and a_2 != b_2) or (a_1 != b_1 and a_2 == b_2) or (a_1 == b_2 and a_2 != b_1) or (a_1 != b_2 and a_2 == b_2):
-            perim += 1 
+        a_fill, a_empty = a
+        b_fill, b_empty = b
+        #if (a_fill == b_fill and a_empty != b_empty) or (a_fill != b_fill and a_empty == b_empty) or (a_fill == b_empty and a_empty != b_fill) or (a_fill != b_empty and a_empty == b_empty):
+        if (a_empty == b_empty):
+            perim += corner_to_corner
             skip = True
         else:
             if not skip:
                 perim += 1
             else:
                 skip = False
-    a_1, a_2 = path[-1]
-    b_1, b_2 = path[0]
-    if (a_1 == b_1 and a_2 != b_2) or (a_1 != b_2 and a_2 == b_2):
+    a_fill, a_empty = path[-1]
+    b_fill, b_empty = path[0]
+    if (a_empty == b_empty):
         perim += corner_to_corner
+        perim -= 1
     else:
-        perim += 2
+        perim += 1
+
 
     #compute number filled cells
     filled = 0
