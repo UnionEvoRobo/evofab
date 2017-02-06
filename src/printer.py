@@ -43,9 +43,9 @@ class Printer(object):
         if provided a camera and gridworld, will take into account the size of the camera array and will not let the printer move so that the camera is no longer within the frame of the world"""
 
         is_valid = self.move_is_valid(camera, gridworld)
-        self.position = self.position.plus(self.v)
         if self.penDown:
             if is_valid:
+                self.position = self.position.plus(self.v)
                 position = (self.position.x, self.position.y)
                 self.grid.PenDraw(position, self.pen_size)
 
