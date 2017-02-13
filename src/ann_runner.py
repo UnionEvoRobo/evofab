@@ -52,11 +52,11 @@ class AnnRunner(object):
         """Translates between the output of the neural network and direction instructions for the printer. leftright and updown are translated separately"""
         if instruction == [1,1,0]:
             return (0, 1) #north
-        elif instruction == [1,1,1]:
+        elif instruction in [[1,1,1]]:
             return (0, -1) #south
-        elif instruction == [1,0,1]:
+        elif instruction in [[1,0,1]]:
             return (-1, 0) #east
-        elif instruction == [1,0,0]:
+        elif instruction in [[1,0,0]]:
             return (1, 0) #west
         elif instruction in [[0,0,0], [0,0,1], [0,1,1], [0,1,0]]:
             return (0, 0) #none

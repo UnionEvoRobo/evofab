@@ -52,8 +52,8 @@ param = {
         'mutation_rate' : 0.08,
         'mutation_range' : (-30, 30),
         'cull_num' : 30,
-        'ann_input' : 9,
-        'ann_hidden' : 26,
+        'ann_input' : 15,
+        'ann_hidden' : 38,
         'ann_output' : 3,
         'cell_scale' : 5,
         'camera_grid_dimension': 3, #factor by which camera cells are bigger than grid cells. must be odd so that the camera aligns to the grid cells
@@ -67,8 +67,8 @@ param = {
         'reward_for_correct' : 100,
         'punishment_for_incorrect': 30,
         'crossover_rate': .5,
-        'recur_mode': 3,
-        'time_to_recur': 4
+        'recur_mode': 0,
+        'time_to_recur': 0
         }
 
 if is_dumping:
