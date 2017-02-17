@@ -8,7 +8,7 @@ from comp_gui_ann_runner import CompGuiAnnRunner
 
 class CompPopulation(AnnPopulation):
     """A population of relatively simple neural networks. Currently impelmented to be semi-specific to the task of optimimizing neural netowrks to control a 3d-printer to draw particular (specified) shapes"""
-    def __init__(self, random_seed, printer_runtime, size, mutation_rate, mutation_range, crossover_rate, replacement_number, num_input, num_hidden, num_output, outputfolder, reward_for_correct=None, punishment_for_incorrect=None, goal=None, is_visual=True, dump_to_files=False, cell_size=0, camera_grid_dimension=3, camera_cell_size = 1, printer_pen_size=1, recur = 0, time = 1):
+    def __init__(self, random_seed, printer_runtime, size, mutation_rate, mutation_range, crossover_rate, replacement_number, num_input, num_hidden, num_output, outputfolder, use_global_coordinates = False, nodes_per_coordinate = 3, world_dimension = 100, reward_for_correct=None, punishment_for_incorrect=None, goal=None, is_visual=True, dump_to_files=False, cell_size=0, camera_grid_dimension=3, camera_cell_size = 1, printer_pen_size=1, recur = 0, time = 1):
         """Constructs a population on which to perform evolution to optimize to the defined fitness function
 
         random_seed: the random seed for the stochastic components of the system. Needs to be specified so that we have repeatable experiments
@@ -40,11 +40,16 @@ class CompPopulation(AnnPopulation):
         super(CompPopulation, self).__init__(random_seed, printer_runtime, size, mutation_rate, mutation_range, crossover_rate, replacement_number, num_input, num_hidden, num_output, outputfolder, reward_for_correct, punishment_for_incorrect, goal, is_visual, dump_to_files, cell_size, camera_grid_dimension, camera_cell_size, printer_pen_size, recur, time)
         self.genotype_factory = CompGenotypeFactory(self, recur, time)
         self.runner = None
+        self.nodes_per_coordinate = nodes_per_coordinate
+        self.use_global_coordinates = use_global_coordinates
+        self.world_dimension = world_dimension
+        if use_global_coordinates:
+            self.num_input += nodes_per_coordinate * 2
 
     def run_from_file(self, cell_size, printer_pen_size, camera_cell_size, camera_grid_dimension, outputfolder, printer_runtime):
         n = ann_io.load(outputfolder + '/curbest.ann')
         if not self.runner:
-            self.runner = CompGuiAnnRunner(cell_size, printer_pen_size, camera_cell_size, camera_grid_dimension, draw_each=True, draw_full=False)
+            self.runner = CompGuiAnnRunner(cell_size, printer_pen_size, camera_cell_size, camera_grid_dimension, self.use_global_coordinates, self.nodes_per_coordinate, self.world_dimension, draw_each=True, draw_full=False)
         else:
             self.runner.reset()
         self.runner.run(n, iterations=printer_runtime)
@@ -87,9 +92,9 @@ class CompGenotype(AnnGenotype):
 
         self.ann.allConnections = self.values
         if self.population.is_visual:
-            runner = CompGuiAnnRunner(self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension, draw_each=True, draw_full=False)
+            runner = CompGuiAnnRunner(self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension, self.population.use_global_coordinates, self.population.nodes_per_coordinate, self.population.world_dimension, draw_each=True, draw_full=False)
         else:
-            runner = CompGuiAnnRunner(self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension, draw_each=False)
+            runner = CompGuiAnnRunner(self.population.cell_size, self.population.printer_pen_size, self.population.camera_cell_size, self.population.camera_grid_dimension, self.population.use_global_coordinates, self.population.nodes_per_coordinate, self.population.world_dimension, draw_each=False)
         actual_grid = runner.run(self.ann, iterations=self.population.printer_runtime)
         return actual_grid.grid
 
