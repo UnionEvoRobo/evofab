@@ -1,5 +1,5 @@
 from complexity_ann_ga import CompPopulation 
-from phys_printer_genetic_algorithms import PhysPopulation
+#from phys_printer_genetic_algorithms import PhysPopulation
 from grid import Grid
 import datetime
 import getopt
@@ -96,26 +96,27 @@ if is_dumping:
             outputfile.write('\n========================\n')
 
 if port:
-    population = PhysPopulation(
-            param['random_seed'],
-            param['printer_runtime'],
-            param['pop_size'],
-            param['mutation_rate'],
-            param['mutation_range'],
-            param['crossover_rate'],
-            param['cull_num'],
-            param['ann_input'],
-            param['ann_hidden'],
-            param['ann_output'],
-            port,
-            sensor_port,
-            conveyor_port,
-            z_port,
-            camera,
-            outputfolder=outputfolder,
-            is_visual=is_visual,
-            dump_to_files=is_dumping,
-            )
+    pass
+    #population = PhysPopulation(
+    #        param['random_seed'],
+    #        param['printer_runtime'],
+    #        param['pop_size'],
+    #        param['mutation_rate'],
+    #        param['mutation_range'],
+    #        param['crossover_rate'],
+    #        param['cull_num'],
+    #        param['ann_input'],
+    #        param['ann_hidden'],
+    #        param['ann_output'],
+    #        port,
+    #        sensor_port,
+    #        conveyor_port,
+    #        z_port,
+    #        camera,
+    #        outputfolder=outputfolder,
+    #        is_visual=is_visual,
+    #        dump_to_files=is_dumping,
+    #        )
 else:
     population = CompPopulation(
             param['random_seed'],
