@@ -50,14 +50,16 @@ class AnnRunner(object):
 
     def get_velocity(self, instruction):
         """Translates between the output of the neural network and direction instructions for the printer. leftright and updown are translated separately"""
-        if instruction in [[0,0,0],[0,0,1]]:
+        if instruction == [1,1,0]:
             return (0, 1) #north
-        elif instruction in [[0,1,1],[0,1,0]]:
+        elif instruction in [[1,1,1]]:
             return (0, -1) #south
-        elif instruction in [[1,1,0],[1,1,1]]:
+        elif instruction in [[1,0,1]]:
             return (-1, 0) #east
-        elif instruction in [[1,0,1],[1,0,0]]:
+        elif instruction in [[1,0,0]]:
             return (1, 0) #west
+        elif instruction in [[0,0,0], [0,0,1], [0,1,1], [0,1,0]]:
+            return (0, 0) #none
         else:
             print "incorrect instruction output from ann"
             assert(False)
