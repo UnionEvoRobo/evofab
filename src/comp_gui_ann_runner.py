@@ -57,15 +57,16 @@ class CompGuiAnnRunner(GuiAnnRunner):
         return self.gridworld
 
     def get_val_for_coord_inputs(self, coord):
-        value_per = coord / self.dimension
+        value_per = self.dimension / self.nodes_per_coordinate
         result = []
         for x in range(self.nodes_per_coordinate):
             v = coord % value_per
+            coord -= v
             if v:
                 result.append(v)
-                coord -= v
             elif coord > 0:
                 result.append(value_per)
+                coord -= value_per
             else:
                 result.append(0)
         return result

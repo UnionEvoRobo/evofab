@@ -49,14 +49,14 @@ current_time = datetime.datetime.now()
 
 param = {
         'pop_size' : 100,
-        'mutation_rate' : 0.08,
+        'mutation_rate' : 0.15,
         'mutation_range' : (-30, 30),
         'cull_num' : 80,
         'ann_input' : 9,
         'ann_hidden' : 42,
         'ann_output' : 3,
         'use_global_coordinates' : True,
-        'nodes_per_coordinate' : 3,
+        'nodes_per_coordinate' : 4,
         'cell_scale' : 5,
         'camera_grid_dimension': 3, #factor by which camera cells are bigger than grid cells. must be odd so that the camera aligns to the grid cells
         'camera_cell_scale': 13,
@@ -64,7 +64,7 @@ param = {
         'world_dimension': 100,
         'random_seed' : int(current_time.strftime('%s')),
         'time' : current_time,
-        'num_gens' : 8000,
+        'num_gens' : 150,
         'printer_runtime' : 1000,
         'printer_pen_size' : 5,
 #        'reward_for_correct' : 100,
