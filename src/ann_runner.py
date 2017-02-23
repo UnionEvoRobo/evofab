@@ -4,6 +4,7 @@ from grid import Grid
 from vector import Vector
 from gridworld import GridWorld
 from ann import Network
+import math
 
 class AnnRunner(object):
     """Wraps up the gross reality of running a ``print'' using the printer simulation (controlled by a neural network)"""
@@ -50,14 +51,20 @@ class AnnRunner(object):
 
     def get_velocity(self, instruction):
         """Translates between the output of the neural network and direction instructions for the printer. leftright and updown are translated separately"""
-        if instruction in [[0,0,0],[0,0,1]]:
-            return (0, 1) #north
-        elif instruction in [[0,1,1],[0,1,0]]:
-            return (0, -1) #south
-        elif instruction in [[1,1,0],[1,1,1]]:
-            return (-1, 0) #east
-        elif instruction in [[1,0,1],[1,0,0]]:
-            return (1, 0) #west
-        else:
-            print "incorrect instruction output from ann"
-            assert(False)
+        m_val = instruction[0]
+        m_index = 0
+        for i,x in enumerate(instruction[1:]):
+            if x > m_val:
+                m_val = x
+                m_index = i+1
+        if 0 == m_index:
+            return (0,0)
+        elif 1 == m_index:
+            return (-1,0)
+        elif 2 == m_index:
+            return (1, 0)
+        elif 3 == m_index:
+            return (0,-1)
+        elif 4 == m_index:
+            return (0, 1)
+
