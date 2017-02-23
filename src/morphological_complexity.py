@@ -1,6 +1,5 @@
 from grid import Grid
 from gui_gridworld import GuiGridWorld
-import pygame
 import time
 from math import *
 

@@ -56,7 +56,7 @@ class CompPopulation(AnnPopulation):
 
     def iteration(self):
         super(CompPopulation, self).iteration()
-        thread.start_new_thread(self.run_from_file, (self.cell_size, self.printer_pen_size, self.camera_cell_size, self.camera_grid_dimension, self.outputfolder, self.printer_runtime))
+        #thread.start_new_thread(self.run_from_file, (self.cell_size, self.printer_pen_size, self.camera_cell_size, self.camera_grid_dimension, self.outputfolder, self.printer_runtime))
 
 class CompGenotypeFactory(object):
     def __init__(self, population, recur, time):

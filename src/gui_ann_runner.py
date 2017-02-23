@@ -5,7 +5,7 @@ from vector import Vector
 from gui_gridworld import GuiGridWorld
 from ann_runner import AnnRunner
 from ann import Network
-import pygame
+#import pygame
 
 import csv
 
@@ -32,14 +32,14 @@ class GuiAnnRunner(AnnRunner):
         self.ideal_camera = GuiCamera(self.gridworld.ideal_grid, self.printer, camera_grid_dimension, camera_cell_size * cell_size) #TODO: this might break -- might need a gridworld not a grid
 
         #gui stuff
-        width = self.gridworld.width() * self.gridworld.gridsize()
-        height = self.gridworld.height() * self.gridworld.gridsize()
-
-        self.window = pygame.display.set_mode((width, height))
-        pygame.init()
+#        width = self.gridworld.width() * self.gridworld.gridsize()
+#        height = self.gridworld.height() * self.gridworld.gridsize()
+#
+#        self.window = pygame.display.set_mode((width, height))
+#        pygame.init()
 
     def update(self):
         self.gridworld.draw(self.window)
         self.printer.draw(self.window)
         self.camera.draw(self.window)
-        pygame.display.update()
+#        pygame.display.update()

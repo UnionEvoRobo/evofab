@@ -1,5 +1,4 @@
 import math
-import numpy as n
 
 from vector import Vector
 from grid import Grid
@@ -48,8 +47,8 @@ class GridWorld(object):
         pen_size: the width of the pen (in gridcells)"""
         if pen_size != 1:
             pixel_dimension = pen_size/2 * self.gridsize()
-            topleft_corner = n.subtract(p, (pixel_dimension/2.0, pixel_dimension/2.0))
-            bottomright_corner = n.add(p, (pixel_dimension/2.0, pixel_dimension/2.0))
+            topleft_corner = (p[0] - pixel_dimension/2.0, p[1] - pixel_dimension/2.0)
+            bottomright_corner = (p[0] + pixel_dimension/2.0, p[1] + pixel_dimension/2.0)
             topleft_cell = self.grid.find_closest_gridloc(topleft_corner)
             bottomright_cell = self.grid.find_closest_gridloc(bottomright_corner)
             #fill all of the cells that fall in the range between topleft -- bottomright
