@@ -6,6 +6,7 @@ import getopt
 import sys
 import os
 import errno
+import threading
 
 helptext = 'ga_runner.py -v -d -t threadnum -o outputfolder -p serial_port -s sensor_port'
 
@@ -17,7 +18,7 @@ except getopt.GetoptError:
 
 is_visual = False
 is_dumping = False
-num_threads = 5
+num_threads = 1
 outputfolder = 'data/'
 port = ''
 sensor_port = ''
@@ -48,12 +49,12 @@ for opt, arg in opts:
 current_time = datetime.datetime.now()
 
 param = {
-        'pop_size' : 100,
+        'pop_size' : 10,
         'mutation_rate' : 0.15,
         'mutation_range' : (-30, 30),
-        'cull_num' : 80,
+        'cull_num' : 8,
         'ann_input' : 9,
-        'ann_hidden' : 30,
+        'ann_hidden' : 45,
         'ann_output' : 5,
         'use_global_coordinates' : True,
         'nodes_per_coordinate' : 4,
@@ -64,8 +65,8 @@ param = {
         'world_dimension': 100,
         'random_seed' : int(current_time.strftime('%s')),
         'time' : current_time,
-        'num_gens' : 100,
-        'printer_runtime' : 1000,
+        'num_gens' : 5,
+        'printer_runtime' : 500,
         'printer_pen_size' : 5,
 #        'reward_for_correct' : 100,
 #        'punishment_for_incorrect': 30,
@@ -76,24 +77,48 @@ param = {
 
 if is_dumping:
     outputfolder = outputfolder.strip()
-    if outputfolder[-1] != "/":
-        outputfolder = outputfolder + "/"
-    if not os.path.isdir(outputfolder):
-        try:
-            os.makedirs(outputfolder)
-        except OSError as exc: # Guard against race condition
-            if exc.errno != errno.EEXIST:
-                raise
-    with open(outputfolder + 'TEST_INFO', 'w') as outputfile:
-        for key, val in param.items():
-            outputfile.write(key + ' : ' + str(val) + '\n')
-        for gridfile in param['inputs']:
-            outputfile.write('\n========================\n')
-            outputfile.write(gridfile + '\n\n')
-            with open(gridfile, 'r') as to_read:
-                for line in to_read:
-                    outputfile.write(line)
-            outputfile.write('\n========================\n')
+    o_outputfolder = outputfolder
+    if num_threads > 1:
+        outputfolder = outputfolder + '_!'
+        for x in range(num_threads):
+            outputfolder = outputfolder[:-2] + str(x) + '/'
+            if not os.path.isdir(outputfolder):
+                try:
+                    os.makedirs(outputfolder)
+                except OSError as exc: # Guard against race condition
+                    if exc.errno != errno.EEXIST:
+                        raise
+            with open(outputfolder + 'TEST_INFO', 'w') as outputfile:
+                for key, val in param.items():
+                    outputfile.write(key + ' : ' + str(val) + '\n')
+                for gridfile in param['inputs']:
+                    outputfile.write('\n========================\n')
+                    outputfile.write(gridfile + '\n\n')
+                    with open(gridfile, 'r') as to_read:
+                        for line in to_read:
+                            outputfile.write(line)
+                    outputfile.write('\n========================\n')
+    else:
+        if outputfolder[-1] != "/":
+            outputfolder = outputfolder + "/"
+        if not os.path.isdir(outputfolder):
+            try:
+                os.makedirs(outputfolder)
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        with open(outputfolder + 'TEST_INFO', 'w') as outputfile:
+            for key, val in param.items():
+                outputfile.write(key + ' : ' + str(val) + '\n')
+            for gridfile in param['inputs']:
+                outputfile.write('\n========================\n')
+                outputfile.write(gridfile + '\n\n')
+                with open(gridfile, 'r') as to_read:
+                    for line in to_read:
+                        outputfile.write(line)
+                outputfile.write('\n========================\n')
+
+
 
 if port:
     pass
@@ -118,27 +143,68 @@ if port:
     #        dump_to_files=is_dumping,
     #        )
 else:
-    population = CompPopulation(
-            param['random_seed'],
-            param['printer_runtime'],
-            param['pop_size'],
-            param['mutation_rate'],
-            param['mutation_range'],
-            param['crossover_rate'],
-            param['cull_num'],
-            param['ann_input'],
-            param['ann_hidden'],
-            param['ann_output'],
-            use_global_coordinates = param['use_global_coordinates'],
-            nodes_per_coordinate = param['nodes_per_coordinate'],
-            world_dimension = param['world_dimension'],
-            outputfolder=outputfolder,
-            is_visual=is_visual,
-            dump_to_files=is_dumping,
-            cell_size = param['cell_scale'],
-            camera_grid_dimension = param['camera_grid_dimension'],
-            camera_cell_size = param['camera_cell_scale'],
-            printer_pen_size=param['printer_pen_size'],
-            recur = param['recur_mode'],
-            )
-population.iterate(param['num_gens'], num_threads)
+    if num_threads > 1:
+        class myThread(threading.Thread):
+            def __init__(self, threadID, name):
+                threading.Thread.__init__(self)
+                self.threadID = threadID
+                self.name = name
+            def run(self):
+                print "Starting " + self.name
+                population = CompPopulation(
+                        param['random_seed'],
+                        param['printer_runtime'],
+                        param['pop_size'],
+                        param['mutation_rate'],
+                        param['mutation_range'],
+                        param['crossover_rate'],
+                        param['cull_num'],
+                        param['ann_input'],
+                        param['ann_hidden'],
+                        param['ann_output'],
+                        use_global_coordinates = param['use_global_coordinates'],
+                        nodes_per_coordinate = param['nodes_per_coordinate'],
+                        world_dimension = param['world_dimension'],
+                        outputfolder=o_outputfolder + str(self.threadID) + '/',
+                        is_visual=is_visual,
+                        dump_to_files=is_dumping,
+                        cell_size = param['cell_scale'],
+                        camera_grid_dimension = param['camera_grid_dimension'],
+                        camera_cell_size = param['camera_cell_scale'],
+                        printer_pen_size=param['printer_pen_size'],
+                        recur = param['recur_mode'],
+                        )
+                print cur_thread
+                population.iterate(param['num_gens'])
+                print "Exiting " + self.name
+        threads = []
+        for cur_thread in range(num_threads):
+            threads.append(myThread(cur_thread, "Thread " + str(cur_thread)))
+        for thread in threads:
+            thread.start()
+        print 'exiting main thread'
+    else:
+        population = CompPopulation(
+                param['random_seed'],
+                param['printer_runtime'],
+                param['pop_size'],
+                param['mutation_rate'],
+                param['mutation_range'],
+                param['crossover_rate'],
+                param['cull_num'],
+                param['ann_input'],
+                param['ann_hidden'],
+                param['ann_output'],
+                use_global_coordinates = param['use_global_coordinates'],
+                nodes_per_coordinate = param['nodes_per_coordinate'],
+                world_dimension = param['world_dimension'],
+                outputfolder=outputfolder,
+                is_visual=is_visual,
+                dump_to_files=is_dumping,
+                cell_size = param['cell_scale'],
+                camera_grid_dimension = param['camera_grid_dimension'],
+                camera_cell_size = param['camera_cell_scale'],
+                printer_pen_size=param['printer_pen_size'],
+                recur = param['recur_mode'],
+                )
+        population.iterate(param['num_gens'], num_threads)
