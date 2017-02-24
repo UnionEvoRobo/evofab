@@ -6,7 +6,6 @@ import random
 import os
 import csv
 
-statsfileheader = ['gen num', 'min', 'max', 'median']
 curbest_filename = 'curbest.ann'
 statsfile_filename = 'stats.csv'
 
@@ -67,18 +66,18 @@ class AnnPopulation(Population):
             print("statsfile_filename ", statsfile_filename)
             with open(self.outputfolder + statsfile_filename, 'w') as statsfile:
                 writer = csv.writer(statsfile)
-                writer.writerow(statsfileheader)
+                writer.writerow([])
 
     def write_stats(self, gen):
         """write relevant statistics to a file"""
         if self.dump_to_files:
             with open(self.outputfolder + statsfile_filename, 'a') as statsfile:
                 self.sort_by_fitness()
-                min_fitness = self.members[0].fitness
-                max_fitness = self.members[-1].fitness
-                median_fitness = self.members[len(self.members)/2].fitness
+                row = [gen]
+                for m in self.members:
+                    row.append(m.fitness)
                 writer = csv.writer(statsfile)
-                writer.writerow([gen, min_fitness, max_fitness, median_fitness])
+                writer.writerow(row)
 
     def output(self, gen):
         """Save the higest fitness member of the population to a file"""
