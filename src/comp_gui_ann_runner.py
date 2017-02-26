@@ -69,4 +69,4 @@ class CompGuiAnnRunner(GuiAnnRunner):
                 coord -= value_per
             else:
                 result.append(0)
-        return result
+        return result 

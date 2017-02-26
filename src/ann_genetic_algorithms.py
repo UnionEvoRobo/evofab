@@ -6,7 +6,7 @@ import random
 import os
 import csv
 
-curbest_filename = 'curbest.ann'
+curbest_filename = '.ann'
 statsfile_filename = 'stats.csv'
 
 class AnnPopulation(Population):
@@ -84,7 +84,7 @@ class AnnPopulation(Population):
         if self.dump_to_files:
             self.sort_by_fitness()
             member = self.members[-1]
-            ann_io.save(member.ann, self.outputfolder + curbest_filename)
+            ann_io.save(member.ann, self.outputfolder + str(gen) + curbest_filename)
 
 class AnnGenotypeFactory(object):
     def __init__(self, population, recur, time):
