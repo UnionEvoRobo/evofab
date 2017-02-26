@@ -54,7 +54,7 @@ param = {
         'mutation_range' : (-30, 30),
         'cull_num' : 80,
         'ann_input' : 9,
-        'ann_hidden' : 45,
+        'ann_hidden' : 75,
         'ann_output' : 5,
         'use_global_coordinates' : True,
         'nodes_per_coordinate' : 4,
@@ -71,8 +71,8 @@ param = {
 #        'reward_for_correct' : 100,
 #        'punishment_for_incorrect': 30,
         'crossover_rate': .5,
-        'recur_mode': 0,
-        'time_to_recur': 0
+        'recur_mode': 3,
+        'time_to_recur': 10
         }
 
 if is_dumping:
