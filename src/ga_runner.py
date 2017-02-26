@@ -49,12 +49,12 @@ for opt, arg in opts:
 current_time = datetime.datetime.now()
 
 param = {
-        'pop_size' : 10,
+        'pop_size' : 6,
         'mutation_rate' : 0.15,
         'mutation_range' : (-30, 30),
-        'cull_num' : 8,
+        'cull_num' : 4,
         'ann_input' : 9,
-        'ann_hidden' : 45,
+        'ann_hidden' : 75,
         'ann_output' : 5,
         'use_global_coordinates' : True,
         'nodes_per_coordinate' : 4,
@@ -66,13 +66,13 @@ param = {
         'random_seed' : int(current_time.strftime('%s')),
         'time' : current_time,
         'num_gens' : 5,
-        'printer_runtime' : 500,
+        'printer_runtime' : 100,
         'printer_pen_size' : 5,
 #        'reward_for_correct' : 100,
 #        'punishment_for_incorrect': 30,
         'crossover_rate': .5,
-        'recur_mode': 0,
-        'time_to_recur': 0
+        'recur_mode': 3,
+        'time_to_recur': 10
         }
 
 if is_dumping:
