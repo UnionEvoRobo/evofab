@@ -58,13 +58,11 @@ class AnnRunner(object):
                 m_val = x
                 m_index = i+1
         if 0 == m_index:
-            return (0,0)
-        elif 1 == m_index:
             return (-1,0)
-        elif 2 == m_index:
+        elif 1 == m_index:
             return (1, 0)
-        elif 3 == m_index:
+        elif 2 == m_index:
             return (0,-1)
-        elif 4 == m_index:
+        elif 3 == m_index:
             return (0, 1)
 
