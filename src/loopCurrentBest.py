@@ -20,7 +20,6 @@ for opt, arg in opts:
 
 while True:
     for a in range(3):
-        try:
             ann_files = glob.glob(ann_dir + str(a) + '/*.ann')
             nums = [x.split('.')[-2] for x in ann_files]
             nums = [int(x.split('/')[-1]) for x in nums]
@@ -30,5 +29,3 @@ while True:
             n = ann_io.load(ann_file)
             runner = CompGuiAnnRunner(5, 5, 13, 3, True, 4, 100, draw_each=True)
             runner.run(n, iterations=200)
-        except:
-            pass
