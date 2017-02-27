@@ -55,7 +55,7 @@ param = {
         'cull_num' : 80,
         'ann_input' : 9,
         'ann_hidden' : 75,
-        'ann_output' : 5,
+        'ann_output' : 4,
         'use_global_coordinates' : True,
         'nodes_per_coordinate' : 4,
         'cell_scale' : 5,
