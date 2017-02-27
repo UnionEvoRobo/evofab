@@ -1,5 +1,6 @@
 import modified_perimeter_to_area
 import perimeter_to_area
+import perimeter_to_rectangular_bound
 import thread
 from ann_genetic_algorithms import *
 from comp_gui_ann_runner import CompGuiAnnRunner 
@@ -84,7 +85,7 @@ class CompGenotype(AnnGenotype):
 
     def calculate_fitness(self, q=None):
        phenotype = self.express() 
-       self.fitness = perimeter_to_area.evaluate(phenotype)
+       self.fitness = perimeter_to_rectangular_bound.evaluate(phenotype)
        print self.fitness
 
     def express(self):
